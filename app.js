@@ -1,5 +1,7 @@
 const PORT = process.env.PORT;
 const path = require('path');
+const logger = require('./lib/log/logger');
+const applicationLogger = require('./lib/log/applicationlogger.js');
 const express = require('express');
 const favicon = require('serve-favicon');
 const app = express();
@@ -26,7 +28,11 @@ app.use('/', require('./routes/index'));
 //   res.send('abcd!');
 // });
 
+// Set Application Log
+// エラーハンドリングミドルウェア設定
+app.use(applicationLogger());
+
 // Execute web application
 app.listen(PORT, () => {
-  console.log(`Application listening at ${PORT}`);
+  logger.application.info(`Application listening at ${PORT}`);
 });
