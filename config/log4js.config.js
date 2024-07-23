@@ -14,6 +14,13 @@ module.exports = {
       numbackups: 7,
       keepFileExt: true,
     },
+    AccessLogAppender: {
+      type: 'dateFile',
+      filename: path.join(LOG_ROOT_DIR, './access.log'),
+      pattern: '-yyyy-MM-dd',
+      // daysToKeep: 7,非推奨
+      numbackups: 7,
+    },
   },
 
   categories: {
@@ -23,6 +30,10 @@ module.exports = {
     },
     application: {
       appenders: ['ApplicationLogAppender', 'ConsoleLogAppender'],
+      level: 'INFO',
+    },
+    access: {
+      appenders: ['AccessLogAppender', 'ConsoleLogAppender'],
       level: 'INFO',
     },
   },

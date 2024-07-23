@@ -2,6 +2,7 @@ const PORT = process.env.PORT;
 const path = require('path');
 const logger = require('./lib/log/logger');
 const applicationLogger = require('./lib/log/applicationlogger.js');
+const accessLogger = require('./lib/log/accesslogger.js');
 const express = require('express');
 const favicon = require('serve-favicon');
 const app = express();
@@ -14,8 +15,21 @@ app.disable('x-powered-by');
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use('/public', express.static(path.join(__dirname, '/public')));
 
+// Set. Access Log
+app.use(accessLogger());
+
 // Dynamic resource routing
 app.use('/', require('./routes/index'));
+
+// Set Application Log
+// エラーハンドリングミドルウェア設定
+app.use(applicationLogger());
+
+// Execute web application
+app.listen(PORT, () => {
+  logger.application.info(`Application listening at ${PORT}`);
+});
+
 // const PORT = 3000;
 
 // app.get('/', (req, res) => {
@@ -27,12 +41,3 @@ app.use('/', require('./routes/index'));
 // app.get('/ab?cd', (req, res) => {
 //   res.send('abcd!');
 // });
-
-// Set Application Log
-// エラーハンドリングミドルウェア設定
-app.use(applicationLogger());
-
-// Execute web application
-app.listen(PORT, () => {
-  logger.application.info(`Application listening at ${PORT}`);
-});
